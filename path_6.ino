@@ -9,12 +9,16 @@ IRrecv IrReceiver(IR_RECEIVE_PIN);
 
 #include "moves.h"
 
-#define wheelDiameter 2.320
+//#define wheelDiameter 2.320
+// Phil's robot
+#define wheelDiameter 1.5  
 #define degPerStep 11.25                                    // deg per full step   /1/5.625  //5.625/64.0
 #define stepsPerRev (360/(degPerStep/64))                   // full steps per rev of output shaft = 2048
 #define inchPerStep ((3.1415*wheelDiameter)/stepsPerRev)    //degPerStep/360.0) =  
 #define stepsPerInch 1./inchPerStep                         // = 0.003589" (with 2.34" dia.)
-#define wheelBase 6.48
+//#define wheelBase 6.48
+// Phil's robot
+#define wheelBase 7.75
 
 // d8stance between wheels
 #define stepsPerDegree (wheelBase*3.1415/inchPerStep)/360   // = 27.3 with abocve dia and base
@@ -90,7 +94,7 @@ void setup() {
  digitalWrite (L_ENPIN, HIGH);              // disable drivers
 
  pinMode(TESTPIN, OUTPUT);
-    
+  pinMode( LED_BUILTIN, OUTPUT ); //Phil    
 //set timer0 interrupt at 2kHz
   TCCR0A = 0;// set entire TCCR0A register to 0
   TCCR0B = 0;// same for TCCR0B
@@ -124,6 +128,7 @@ void loop(){
   results.value = 0;
   cmdRcvd = false;
   do {
+    digitalWrite( LED_BUILTIN, HIGH );
     if (irrecv.decode(&results)){
       Serial.println(results.value, HEX);
       irrecv.resume();
@@ -177,6 +182,8 @@ void loop(){
   for (i=0; ; i++)
   {
     if (pm[i].amount != 0) {
+      digitalWrite( LED_BUILTIN, LOW ); // Phil
+
      #include "domove.h"
     }
     else
